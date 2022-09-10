@@ -87,6 +87,12 @@ CREATE table order_product (
 	FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+CREATE table product_image (
+	product_id UUID NOT NULL,
+	image_url VARCHAR(255) NOT NULL,
+	FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
 INSERT INTO products (name, slug, image, category,
   description, brand, price, count_in_stock, rating) VALUES ('Printed cotton poplin bowling shirt', 'cotton-bowling-shirt', 'https://res.cloudinary.com/dxf7urmsh/image/upload/v1662573185/694125_ZAJSS_7371_004_100_0000_Light-Printed-cotton-poplin-bowling-shirt_wkjsln.jpg', 'Shirts', 'Pursuing the concept of escapism and faraway destination, Gucci Love Parade presents a series of pieces inspired by travel to warm places. Prints recalling typical souvenir designs, create playful yet elegant ready-to-wear pieces.', 'Gucci', 999, 1, 4 );
 
