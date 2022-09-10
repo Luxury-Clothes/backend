@@ -13,9 +13,9 @@ const devConfig = `postgresql://postgres:123456@db:5432/postgres`;
 const proConfig = process.env.DATABASE_URL;
 const pool = new pg_1.Pool({
     connectionString: process.env.NODE_ENV === 'production' ? proConfig : devConfig,
-    // ssl: {
-    //   rejectUnauthorized: false,
-    // },
+    ssl: {
+      rejectUnauthorized: false,
+    },
 });
 const query = (text, vars) => pool.query(text, vars);
 exports.query = query;
