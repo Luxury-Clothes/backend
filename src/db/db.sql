@@ -71,7 +71,6 @@ CREATE TABLE orders (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
 
-
 CREATE table order_product (
 	order_id UUID NOT NULL,
 	product_id UUID NOT NULL,
@@ -79,6 +78,12 @@ CREATE table order_product (
 	FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+CREATE table product_image (
+	product_id UUID NOT NULL,
+	image_url VARCHAR(255) NOT NULL,
+	FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
 
 INSERT INTO products (name, slug, image, category,
-  description, brand, price, count_in_stock, rating) VALUES ('Nice Pants', 'pants-gucci', 'https://imgur.com/R2WFaCK.png', 'Pants', 'Trousers with tucks at the waist. Front pockets, back welt pocket. Turn-ups at the bottom, zip and button closure.', 'Gucci', 599, 100, 5 );
+  description, brand, price, count_in_stock, rating) VALUES ('Nice Shoes', 'shoes-gucci', 'https://imgur.com/QmWPxXA.png', 'Shoes', 'Derby shoes with five-eye lacing. Rounded nose.', 'Gucci', 499, 100, 2 );

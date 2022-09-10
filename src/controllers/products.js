@@ -19,6 +19,10 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const allProducts = (yield (0, db_1.query)('SELECT * FROM products;', [])).rows;
     const countProducts = allProducts.length;
     const products = (yield (0, db_1.query)('SELECT * FROM products ORDER BY price DESC OFFSET $1 LIMIT $2;', [pageSize * (page - 1), pageSize])).rows;
+    for (const product of products) {
+        const images = (yield (0, db_1.query)('SELECT image_url FROM product_image WHERE product_id = $1;', [product.id])).rows;
+        product.images = images.map(({ image_url }) => image_url);
+    }
     res.status(http_status_codes_1.StatusCodes.OK).json({
         products,
         countProducts,
@@ -38,7 +42,7 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const order = req.query.order || 'desc';
     const firstNum = String(price).split('-')[0];
     const secondNum = String(price).split('-')[1];
-    const allProducts = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5;', [
+    const allProducts = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(title) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5;', [
         // @ts-ignore
         '%' + ((_a = search === null || search === void 0 ? void 0 : search.toLowerCase()) === null || _a === void 0 ? void 0 : _a.trim()) + '%',
         category === 'all' ? '%' : '%' + category + '%',
@@ -47,7 +51,7 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         rating === 'all' ? 0 : rating,
     ])).rows;
     const countProducts = allProducts.length;
-    const products = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5  OFFSET $6 LIMIT $7;', [
+    const products = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(title) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5  OFFSET $6 LIMIT $7;', [
         // @ts-ignore
         '%' + ((_b = search === null || search === void 0 ? void 0 : search.toLowerCase()) === null || _b === void 0 ? void 0 : _b.trim()) + '%',
         category === 'all' ? '%' : '%' + category + '%',
@@ -57,6 +61,10 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         pageSize * (page - 1),
         pageSize,
     ])).rows;
+    for (const product of products) {
+        const images = (yield (0, db_1.query)('SELECT image_url FROM product_image WHERE product_id = $1;', [product.id])).rows;
+        product.images = images.map(({ image_url }) => image_url);
+    }
     products.sort((a, b) => order === 'desc' ? b.price - a.price : a.price - b.price);
     res.status(http_status_codes_1.StatusCodes.OK).json({
         products,
@@ -67,9 +75,11 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.searchProducts = searchProducts;
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = (yield (0, db_1.query)('SELECT * FROM products WHERE id = $1;', [req.params.id])).rows;
-    if (product.length) {
-        return res.status(http_status_codes_1.StatusCodes.OK).json(product[0]);
+    const product = (yield (0, db_1.query)('SELECT * FROM products WHERE id = $1;', [req.params.id])).rows[0];
+    if (product) {
+        const images = (yield (0, db_1.query)('SELECT image_url FROM product_image WHERE product_id = $1;', [product.id])).rows;
+        product.images = images.map(({ image_url }) => image_url);
+        return res.status(http_status_codes_1.StatusCodes.OK).json(product);
     }
     else {
         throw new errors_1.NotFoundError(`Product with id ${req.params.id} not found.`);

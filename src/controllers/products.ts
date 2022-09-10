@@ -20,6 +20,16 @@ export const getProducts = async (req: Request, res: Response) => {
     )
   ).rows;
 
+  for (const product of products) {
+    const images = (
+      await query(
+        'SELECT image_url FROM product_image WHERE product_id = $1;',
+        [product.id]
+      )
+    ).rows;
+    product.images = images.map(({ image_url }) => image_url);
+  }
+
   res.status(StatusCodes.OK).json({
     products,
     countProducts,
@@ -48,7 +58,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 
   const allProducts = (
     await query(
-      'SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5;',
+      'SELECT * FROM products WHERE LOWER(title) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5;',
       [
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
@@ -64,7 +74,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 
   const products = (
     await query(
-      'SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5  OFFSET $6 LIMIT $7;',
+      'SELECT * FROM products WHERE LOWER(title) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5  OFFSET $6 LIMIT $7;',
       [
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
@@ -77,6 +87,16 @@ export const searchProducts = async (req: Request, res: Response) => {
       ]
     )
   ).rows;
+
+  for (const product of products) {
+    const images = (
+      await query(
+        'SELECT image_url FROM product_image WHERE product_id = $1;',
+        [product.id]
+      )
+    ).rows;
+    product.images = images.map(({ image_url }) => image_url);
+  }
 
   products.sort((a, b) =>
     order === 'desc' ? b.price - a.price : a.price - b.price
@@ -93,9 +113,16 @@ export const searchProducts = async (req: Request, res: Response) => {
 export const getProduct = async (req: Request, res: Response) => {
   const product = (
     await query('SELECT * FROM products WHERE id = $1;', [req.params.id])
-  ).rows;
-  if (product.length) {
-    return res.status(StatusCodes.OK).json(product[0]);
+  ).rows[0];
+  if (product) {
+    const images = (
+      await query(
+        'SELECT image_url FROM product_image WHERE product_id = $1;',
+        [product.id]
+      )
+    ).rows;
+    product.images = images.map(({ image_url }) => image_url);
+    return res.status(StatusCodes.OK).json(product);
   } else {
     throw new NotFoundError(`Product with id ${req.params.id} not found.`);
   }
