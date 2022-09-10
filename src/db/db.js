@@ -14,7 +14,7 @@ const proConfig = process.env.DATABASE_URL;
 const pool = new pg_1.Pool({
     connectionString: process.env.NODE_ENV === 'production' ? proConfig : devConfig,
     ssl: {
-      rejectUnauthorized: false,
+        rejectUnauthorized: false,
     },
 });
 const query = (text, vars) => pool.query(text, vars);

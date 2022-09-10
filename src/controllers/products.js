@@ -35,7 +35,7 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const category = req.query.category || 'all';
     const price = req.query.price || 'all';
     const rating = Number(req.query.rating) || 'all';
-    const order = String(req.query.order) || 'DESC';
+    const order = req.query.order || 'desc';
     const firstNum = String(price).split('-')[0];
     const secondNum = String(price).split('-')[1];
     const allProducts = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5;', [

@@ -41,7 +41,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 
   const rating = Number(req.query.rating) || 'all';
 
-  const order = String(req.query.order) || 'desc';
+  const order = req.query.order || 'desc';
 
   const firstNum = String(price).split('-')[0];
   const secondNum = String(price).split('-')[1];
