@@ -47,17 +47,17 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         rating === 'all' ? 0 : rating,
     ])).rows;
     const countProducts = allProducts.length;
-    const products = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5 ORDER BY price $6 OFFSET $7 LIMIT $8;', [
+    const products = (yield (0, db_1.query)('SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5  OFFSET $6 LIMIT $7;', [
         // @ts-ignore
         '%' + ((_b = search === null || search === void 0 ? void 0 : search.toLowerCase()) === null || _b === void 0 ? void 0 : _b.trim()) + '%',
         category === 'all' ? '%' : '%' + category + '%',
         price === 'all' ? 0 : firstNum,
         price === 'all' ? 999999 : secondNum,
         rating === 'all' ? 0 : rating,
-        order.toUpperCase(),
         pageSize * (page - 1),
         pageSize,
     ])).rows;
+    products.sort((a, b) => order === 'desc' ? a.price - b.price : b.price - a.price);
     res.status(http_status_codes_1.StatusCodes.OK).json({
         products,
         countProducts,
