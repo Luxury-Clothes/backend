@@ -57,7 +57,7 @@ const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         pageSize * (page - 1),
         pageSize,
     ])).rows;
-    products.sort((a, b) => order === 'desc' ? a.price - b.price : b.price - a.price);
+    products.sort((a, b) => order === 'desc' ? b.price - a.price : a.price - b.price);
     res.status(http_status_codes_1.StatusCodes.OK).json({
         products,
         countProducts,

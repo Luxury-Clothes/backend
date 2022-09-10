@@ -79,7 +79,7 @@ export const searchProducts = async (req: Request, res: Response) => {
   ).rows;
 
   products.sort((a, b) =>
-    order === 'desc' ? a.price - b.price : b.price - a.price
+    order === 'desc' ? b.price - a.price : a.price - b.price
   );
 
   res.status(StatusCodes.OK).json({
