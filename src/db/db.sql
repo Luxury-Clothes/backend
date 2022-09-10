@@ -78,3 +78,7 @@ CREATE table order_product (
 	FOREIGN KEY (order_id) REFERENCES orders(id),
 	FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+
+INSERT INTO products (name, slug, image, category,
+  description, brand, price, count_in_stock, rating) VALUES ('Nice Pants', 'pants-gucci', 'https://imgur.com/R2WFaCK.png', 'Pants', 'Trousers with tucks at the waist. Front pockets, back welt pocket. Turn-ups at the bottom, zip and button closure.', 'Gucci', 599, 100, 5 );

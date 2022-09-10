@@ -1,10 +1,18 @@
-import { Request, Response } from 'express';
-
-import { query } from '../db/db';
-
-export const createTable = async (req: Request, res: Response) => {
-  await query(
-    `
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createTable = void 0;
+const db_1 = require("../db/db");
+const createTable = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, db_1.query)(`
 	CREATE TABLE users (
 	id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,
@@ -93,13 +101,7 @@ INSERT INTO products (name, slug, image, category,
 
   INSERT INTO products (name, slug, image, category,
   description, brand, price, count_in_stock, rating) VALUES ('Wool sweater with Gucci patch', 'pullover-gucci', 'https://res.cloudinary.com/dxf7urmsh/image/upload/v1662572729/694786_XKCD5_4804_002_100_0000_Light--Gucci_fjoia2.jpg', 'Sweaters', 'A blue crewneck sweater crafted from knitted wool. Refreshed sweater styles instill a contemporary feel into traditional silhouettes, the knit Gucci patch gives a subtle nod the House heritage.', 'Gucci', 499, 10, 5 );
-    `,
-    []
-  );
-
-  res.send('Tables created!');
-};
-
-
-
-
+    `, []);
+    res.send('Tables created!');
+});
+exports.createTable = createTable;

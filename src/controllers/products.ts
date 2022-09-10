@@ -14,10 +14,10 @@ export const getProducts = async (req: Request, res: Response) => {
   const countProducts = allProducts.length;
 
   const products = (
-    await query('SELECT * FROM products OFFSET $1 LIMIT $2;', [
-      pageSize * (page - 1),
-      pageSize,
-    ])
+    await query(
+      'SELECT * FROM products ORDER BY price DESC OFFSET $1 LIMIT $2;',
+      [pageSize * (page - 1), pageSize]
+    )
   ).rows;
 
   res.status(StatusCodes.OK).json({
@@ -41,6 +41,8 @@ export const searchProducts = async (req: Request, res: Response) => {
 
   const rating = Number(req.query.rating) || 'all';
 
+  const order = String(req.query.order) || 'DESC';
+
   const firstNum = String(price).split('-')[0];
   const secondNum = String(price).split('-')[1];
 
@@ -62,7 +64,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 
   const products = (
     await query(
-      'SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5 OFFSET $6 LIMIT $7;',
+      'SELECT * FROM products WHERE LOWER(name) LIKE $1 AND LOWER(category) LIKE $2 AND price BETWEEN $3 AND $4 AND rating >= $5 ORDER BY price $6 OFFSET $7 LIMIT $8;',
       [
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
@@ -70,6 +72,7 @@ export const searchProducts = async (req: Request, res: Response) => {
         price === 'all' ? 0 : firstNum,
         price === 'all' ? 999999 : secondNum,
         rating === 'all' ? 0 : rating,
+        order.toUpperCase(),
         pageSize * (page - 1),
         pageSize,
       ]
