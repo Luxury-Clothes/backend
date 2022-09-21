@@ -17,11 +17,11 @@ import productsRouter from './routes/products';
 import ordersRouter from './routes/orders';
 import seedRouter from './routes/seed';
 import uploadRouter from './routes/upload';
+import paymentRouter from './routes/payment';
 
 const app = express();
 
 app.set('trust proxy', 1);
-
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -42,6 +42,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/orders', auth, ordersRouter);
 app.use('/api/seed', seedRouter);
 app.use('/api/upload', auth, uploadRouter);
+app.use('/api/payment', auth, paymentRouter);
 
 app.use(errorHandler);
 app.use(notFound);
