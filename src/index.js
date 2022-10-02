@@ -63,7 +63,10 @@ app.use((0, cors_1.default)({
     origin: '*',
     credentials: true,
 }));
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.get('/', (req, res) => {
+    res.redirect('docs');
+});
 app.use('/api/auth', auth_2.default);
 app.use('/api/products', products_1.default);
 app.use('/api/orders', auth_1.default, orders_1.default);
