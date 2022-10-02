@@ -37,7 +37,11 @@ app.use(
   })
 );
 
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+app.get('/', (req, res) => {
+  res.redirect('docs');
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
