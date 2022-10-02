@@ -20,7 +20,7 @@ CREATE TABLE reviews (
 CREATE TABLE products (
 	id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
 	title VARCHAR(255) NOT NULL,
-	slug VARCHAR(255) NOT NULL,
+	tags VARCHAR(255) NOT NULL,
 	image VARCHAR(255) DEFAULT '',
 	category VARCHAR(255) NOT NULL,
 	description text NOT NULL,
@@ -85,5 +85,13 @@ CREATE table product_image (
 );
 
 
-INSERT INTO products (title, slug, image, category,
-  description, brand, price, count_in_stock, rating) VALUES ('Nice Shoes', 'shoes-gucci', 'https://imgur.com/QmWPxXA.png', 'Shoes', 'Derby shoes with five-eye lacing. Rounded nose.', 'Gucci', 499, 100, 2 );
+INSERT INTO products (title, tags, image, category,
+  description, brand, price, count_in_stock, rating) VALUES ('Джинсы-кюлоты с посадкой на талии', 'Женская, Джинсы, Wideleg', 'https://imgur.com/AymQCPe.png', 'Джинсы','Коллекция Committed. Хлопковая ткань в джинсовом стиле. Фасон кюлоты. Укороченная длина. Посадка на талии. Шлевки. Пять карманов. Застежка на молнию и пуговицы. Длина по внутреннему шву 68 см.
+
+Изделия с отметкой Committed изготовлены с использованием экологичных волокон и/или устойчивых производственных процессов, что снижает негативное воздействие на окружающую среду. Mango продолжает поддерживать производственную практику, ориентированную на заботу об окружающей среде, увеличивая таким образом количество экологичных изделий в своих коллекциях.', 'Gucci', 4299, 100, 5);
+
+
+
+
+
+  INSERT INTO product_image (product_id, image_url) VALUES ('b8500694-6fed-4482-9bf4-9f75a2b49479', 'https://imgur.com/yyxL7m0');
