@@ -1,0 +1,486 @@
+openapi: 3.0.0
+info:
+  title: L&C Project RESTful API
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://project-landc.herokuapp.com/api
+  variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Register
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterRequest'
+              - example:
+                  username: Jane doe
+                  email: janedoe@gmail.com
+                  password: '123456'
+                  confirmPassword: '123456'
+            example:
+              username: Jane doe
+              email: janedoe@gmail.com
+              password: '123456'
+              confirmPassword: '123456'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LoginRequest'
+              - example:
+                  email: janedoe@gmail.com
+                  password: '123456'
+            example:
+              email: janedoe@gmail.com
+              password: '123456'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/logout:
+    get:
+      tags:
+      - Auth
+      summary: Logout
+      operationId: Logout
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/me:
+    get:
+      tags:
+      - Auth
+      summary: Me
+      operationId: Me
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /products:
+    get:
+      tags:
+      - Products
+      summary: Get Products
+      operationId: GetProducts
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /products/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The Product Id
+    get:
+      tags:
+      - Products
+      summary: Get Product
+      operationId: GetProduct
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /products/categories:
+    get:
+      tags:
+      - Products
+      summary: Get Categories
+      operationId: GetCategories
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /products/search:
+    get:
+      tags:
+      - Products
+      summary: Search Products
+      operationId: SearchProducts
+      parameters:
+      - name: page
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 1
+      - name: pageSize
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 2
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /orders:
+    post:
+      tags:
+      - Orders
+      summary: Create Order
+      operationId: CreateOrder
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateOrderRequest'
+              - example:
+                  email_address: harry@gmail.com
+                  full_name: harry potter
+                  address: berezovaya 11
+                  country: Russia
+                  postal_code: 443080
+                  city: Samara
+                  payment_method: Stripe
+                  items_price: 999
+                  shipping_price: 20
+                  tax_price: 20
+                  total_price: 1038
+                  products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+            example:
+              email_address: harry@gmail.com
+              full_name: harry potter
+              address: berezovaya 11
+              country: Russia
+              postal_code: 443080
+              city: Samara
+              payment_method: Stripe
+              items_price: 999
+              shipping_price: 20
+              tax_price: 20
+              total_price: 1038
+              products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Orders
+      summary: Get My Orders
+      operationId: GetMyOrders
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /orders/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The Order Id
+    get:
+      tags:
+      - Orders
+      summary: Get Order
+      operationId: GetOrder
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - Orders
+      summary: Delete Order
+      operationId: DeleteOrder
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /orders/payment/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The Product Id
+    patch:
+      tags:
+      - Orders
+      summary: Update Payment
+      operationId: UpdatePayment
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /orders/delivery/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The Ordery Id
+    patch:
+      tags:
+      - Orders
+      summary: Update Delivery
+      operationId: UpdateDelivery
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /payment/create-payment-intent:
+    post:
+      tags:
+      - Payment
+      summary: Create Payment Intent
+      operationId: CreatePaymentIntent
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreatePaymentIntentRequest'
+              - example:
+                  amount: 200
+                  currency: Rub
+            example:
+              amount: 200
+              currency: Rub
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /upload:
+    post:
+      tags:
+      - Upload
+      summary: Upload Image
+      operationId: UploadImage
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding: {}
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /upload/{image}:
+    parameters:
+      - in: path
+        name: image
+        schema:
+          type: string
+        required: true
+        description: The Image Name
+    delete:
+      tags:
+      - Upload
+      summary: Delete Image
+      operationId: DeleteImage
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+      - username
+      - email
+      - password
+      - confirmPassword
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+      example:
+        username: Jane doe
+        email: janedoe@gmail.com
+        password: '123456'
+        confirmPassword: '123456'
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: janedoe@gmail.com
+        password: '123456'
+    CreateOrderRequest:
+      title: CreateOrderRequest
+      required:
+      - email_address
+      - full_name
+      - address
+      - country
+      - postal_code
+      - city
+      - payment_method
+      - items_price
+      - shipping_price
+      - tax_price
+      - total_price
+      - products
+      type: object
+      properties:
+        email_address:
+          type: string
+        full_name:
+          type: string
+        address:
+          type: string
+        country:
+          type: string
+        postal_code:
+          type: integer
+          format: int32
+        city:
+          type: string
+        payment_method:
+          type: string
+        items_price:
+          type: integer
+          format: int32
+        shipping_price:
+          type: integer
+          format: int32
+        tax_price:
+          type: integer
+          format: int32
+        total_price:
+          type: integer
+          format: int32
+        products:
+          type: string
+      example:
+        email_address: harry@gmail.com
+        full_name: harry potter
+        address: berezovaya 11
+        country: Russia
+        postal_code: 443080
+        city: Samara
+        payment_method: Stripe
+        items_price: 999
+        shipping_price: 20
+        tax_price: 20
+        total_price: 1038
+        products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+    CreatePaymentIntentRequest:
+      title: CreatePaymentIntentRequest
+      required:
+      - amount
+      - currency
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int32
+        currency:
+          type: string
+      example:
+        amount: 200
+        currency: Rub
+security:
+- {}
+tags:
+- name: Auth
+- name: Products
+- name: Orders
+- name: Payment
+- name: Upload

@@ -4,6 +4,10 @@ import 'express-async-errors';
 import 'dotenv/config';
 import 'colors';
 
+import * as swaggerUI from 'swagger-ui-express';
+import yaml from 'yamljs';
+const swaggerDocument = yaml.load('./swagger.yaml');
+
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -33,9 +37,7 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.status(200).send('hello world!');
-});
+app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
