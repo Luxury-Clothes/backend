@@ -22,6 +22,7 @@ import ordersRouter from './routes/orders';
 import seedRouter from './routes/seed';
 import uploadRouter from './routes/upload';
 import paymentRouter from './routes/payment';
+import cartRouter from './routes/cart';
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/orders', auth, ordersRouter);
 app.use('/api/seed', seedRouter);
 app.use('/api/upload', auth, uploadRouter);
 app.use('/api/payment', auth, paymentRouter);
+app.use('/api/cart', auth, cartRouter);
 
 app.use(errorHandler);
 app.use(notFound);
