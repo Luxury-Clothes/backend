@@ -10,6 +10,15 @@ export const getCart = async (req: Request, res: Response) => {
       [res.locals.user.id]
     )
   ).rows;
+  for (const product of products) {
+    const images = (
+      await query(
+        'SELECT image_url FROM product_image WHERE product_id = $1;',
+        [product.id]
+      )
+    ).rows;
+    product.images = images.map(({ image_url }) => image_url);
+  }
 
   return res.status(StatusCodes.OK).json(products);
 };
