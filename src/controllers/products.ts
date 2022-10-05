@@ -134,3 +134,37 @@ export const getCategories = async (req: Request, res: Response) => {
   ).rows;
   res.status(StatusCodes.OK).json(categories.map((obj) => obj.category));
 };
+
+
+
+export const getFavourites = async (req: Request, res: Response) => {
+  const favourites = (
+    await query(
+      'SELECT * FROM favourites INNER JOIN products ON favourites.product_id = products.id WHERE favourites.user_id = $1;',
+      [res.locals.user.id]
+    )
+  ).rows;
+  return res.status(StatusCodes.OK).json(favourites);
+};
+
+export const toggleFavourite = async (req: Request, res: Response) => {
+  const favourite = (
+    await query(
+      'SELECT * FROM favourites WHERE user_id = $1 AND product_id = $2;',
+      [res.locals.user.id, req.params.id]
+    )
+  ).rows[0];
+
+  if (favourite) {
+    await query(
+      'DELETE FROM favourites WHERE user_id = $1 AND product_id = $2;',
+      [res.locals.user.id, req.params.id]
+    );
+  } else {
+    await query('INSERT INTO favourites VALUES ($1, $2);', [
+      res.locals.user.id,
+      req.params.id,
+    ]);
+  }
+  return res.status(StatusCodes.OK).json({ message: 'success' });
+};
