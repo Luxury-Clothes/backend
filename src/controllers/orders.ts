@@ -23,13 +23,13 @@ export const createOrder = async (req: Request, res: Response) => {
   const payment = (
     await query(
       'INSERT INTO payments (status, email_address) VALUES ($1, $2) RETURNING *;',
-      ['not paid', email_address]
+      ['paid', email_address]
     )
   ).rows[0];
 
   const order = (
     await query(
-      'INSERT INTO orders (full_name, address, country, postal_code, city, payment_method, payment_id, items_price, shipping_price, tax_price, total_price, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *;',
+      'INSERT INTO orders (full_name, address, country, postal_code, city, payment_method, payment_id, items_price, shipping_price, tax_price, total_price, user_id, is_paid, paid_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, true, $13) RETURNING *;',
       [
         full_name,
         address,
@@ -43,14 +43,15 @@ export const createOrder = async (req: Request, res: Response) => {
         tax_price,
         total_price,
         res.locals.user.id,
+        new Date(),
       ]
     )
   ).rows[0];
 
   for (const product of JSON.parse(products)) {
     await query(
-      'INSERT INTO order_product (order_id, product_id) VALUES ($1, $2);',
-      [order.id, product]
+      'INSERT INTO order_product (order_id, product_id, quantity) VALUES ($1, $2, $3);',
+      [order.id, product, product.quantity]
     );
   }
 
