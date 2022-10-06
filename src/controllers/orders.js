@@ -32,7 +32,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         new Date(),
     ])).rows[0];
     for (const product of products) {
-        yield (0, db_1.query)('INSERT INTO order_product (order_id, product_id, quantity) VALUES ($1, $2, $3);', [order.id, product, product.quantity]);
+        yield (0, db_1.query)('INSERT INTO order_product (order_id, product_id, quantity) VALUES ($1, $2, $3);', [order.id, product.id, product.quantity]);
     }
     const fullProducts = (yield (0, db_1.query)('SELECT * FROM products INNER JOIN (SELECT * FROM order_product WHERE order_id = $1) order_product ON products.id = order_product.product_id;', [order.id])).rows;
     order.products = fullProducts;

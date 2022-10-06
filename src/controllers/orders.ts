@@ -51,7 +51,7 @@ export const createOrder = async (req: Request, res: Response) => {
   for (const product of products) {
     await query(
       'INSERT INTO order_product (order_id, product_id, quantity) VALUES ($1, $2, $3);',
-      [order.id, product, product.quantity]
+      [order.id, product.id, product.quantity]
     );
   }
 
