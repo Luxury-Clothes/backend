@@ -37,3 +37,12 @@ export const getMessages = async (req: Request, res: Response) => {
   ).rows;
   res.status(StatusCodes.OK).json(messages);
 };
+
+export const deleteMessage = async (req: Request, res: Response) => {
+  await query('DELETE FROM messages WHERE id = $1 and user_id = $2;', [
+    req.params.id,
+    res.locals.user.id,
+  ]);
+
+  res.status(StatusCodes.OK).json({ message: 'success' });
+};
