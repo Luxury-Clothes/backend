@@ -39,11 +39,11 @@ app.use(
   })
 );
 
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-// app.get('/', (req, res) => {
-//   res.send(`<h1><a href="/docs">Go to Docs</a></h1>`);
-// });
+app.get('/', (req, res) => {
+  res.redirect('/');
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
