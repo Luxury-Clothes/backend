@@ -23,6 +23,7 @@ import seedRouter from './routes/seed';
 import uploadRouter from './routes/upload';
 import paymentRouter from './routes/payment';
 import cartRouter from './routes/cart';
+import messagesRouter from './routes/messages';
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/seed', seedRouter);
 app.use('/api/upload', auth, uploadRouter);
 app.use('/api/payment', auth, paymentRouter);
 app.use('/api/cart', auth, cartRouter);
+app.use('/api/messages', auth, messagesRouter);
 
 app.use(errorHandler);
 app.use(notFound);
