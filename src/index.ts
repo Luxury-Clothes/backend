@@ -42,7 +42,7 @@ app.use(
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
-  res.redirect('/');
+  res.redirect('/docs');
 });
 
 app.use('/api/auth', authRouter);
