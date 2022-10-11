@@ -20,7 +20,7 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.sendMessage = sendMessage;
 const updateMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { subject, message, isSend } = req.body;
-    const updatedMessage = (yield (0, db_1.query)('UPDATE messages SET subject = $1, message = $2, is_send = $3, updated_at = CURRENT_DATE WHERE id = $4 RETURNING *;', [subject, message, isSend, req.params.id])).rows[0];
+    const updatedMessage = (yield (0, db_1.query)('UPDATE messages SET subject = $1, message = $2, is_send = $3, updated_at = NOW() WHERE id = $4 RETURNING *;', [subject, message, isSend, req.params.id])).rows[0];
     res.status(http_status_codes_1.StatusCodes.OK).json(updatedMessage);
 });
 exports.updateMessage = updateMessage;

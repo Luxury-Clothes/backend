@@ -21,7 +21,7 @@ export const updateMessage = async (req: Request, res: Response) => {
 
   const updatedMessage = (
     await query(
-      'UPDATE messages SET subject = $1, message = $2, is_send = $3, updated_at = CURRENT_DATE WHERE id = $4 RETURNING *;',
+      'UPDATE messages SET subject = $1, message = $2, is_send = $3, updated_at = NOW() WHERE id = $4 RETURNING *;',
       [subject, message, isSend, req.params.id]
     )
   ).rows[0];
