@@ -76,7 +76,7 @@ const getOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getOrder = getOrder;
 const getMyOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const orders = (yield (0, db_1.query)('SELECT * FROM orders WHERE user_id = $1 ORDRER BY created_at DESC;', [res.locals.user.id])).rows;
+    const orders = (yield (0, db_1.query)('SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC;', [res.locals.user.id])).rows;
     for (const order of orders) {
         const fullProducts = (yield (0, db_1.query)('SELECT * FROM products INNER JOIN (SELECT * FROM order_product WHERE order_id = $1) order_product ON products.id = order_product.product_id;', [order.id])).rows;
         const payment = (yield (0, db_1.query)('SELECT * FROM payments WHERE id = $1;', [order.payment_id])).rows[0];
