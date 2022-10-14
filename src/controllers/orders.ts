@@ -148,9 +148,10 @@ export const getOrder = async (req: Request, res: Response) => {
 
 export const getMyOrders = async (req: Request, res: Response) => {
   const orders = (
-    await query('SELECT * FROM orders WHERE user_id = $1;', [
-      res.locals.user.id,
-    ])
+    await query(
+      'SELECT * FROM orders WHERE user_id = $1 ORDRER BY created_at DESC;',
+      [res.locals.user.id]
+    )
   ).rows;
 
   for (const order of orders) {
