@@ -1,16 +1,18 @@
 openapi: 3.0.0
 info:
-  title: L&C Project RESTful API
-  contact: {}
+  title: Luxury Clothes Backend
+  contact:
+    name: Alexey Poltoradnev
+    email: poltoradnevone@gmail.com
   version: '1.0'
 servers:
-- url: https://project-landc.herokuapp.com/api
-  variables: {}
+  - url: https://project-landc.herokuapp.com/api
+    variables: {}
 paths:
   /auth/register:
     post:
       tags:
-      - Auth
+        - Auth
       summary: Register
       operationId: Register
       parameters: []
@@ -20,15 +22,15 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/RegisterRequest'
-              - example:
-                  username: Jane doe
-                  email: janedoe@gmail.com
-                  password: '123456'
-                  confirmPassword: '123456'
+                - $ref: '#/components/schemas/RegisterRequest'
+                - example:
+                    username: Bob Ross
+                    email: bobross@gmail.com
+                    password: '123456'
+                    confirmPassword: '123456'
             example:
-              username: Jane doe
-              email: janedoe@gmail.com
+              username: Bob Ross
+              email: bobross@gmail.com
               password: '123456'
               confirmPassword: '123456'
         required: true
@@ -37,11 +39,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /auth/login:
     post:
       tags:
-      - Auth
+        - Auth
       summary: Login
       operationId: Login
       parameters: []
@@ -51,12 +52,12 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/LoginRequest'
-              - example:
-                  email: janedoe@gmail.com
-                  password: '123456'
+                - $ref: '#/components/schemas/LoginRequest'
+                - example:
+                    email: bobross@gmail.com
+                    password: '123456'
             example:
-              email: janedoe@gmail.com
+              email: bobross@gmail.com
               password: '123456'
         required: true
       responses:
@@ -64,11 +65,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /auth/logout:
     get:
       tags:
-      - Auth
+        - Auth
       summary: Logout
       operationId: Logout
       parameters: []
@@ -77,11 +77,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /auth/me:
     get:
       tags:
-      - Auth
+        - Auth
       summary: Me
       operationId: Me
       parameters: []
@@ -90,11 +89,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /products:
     get:
       tags:
-      - Products
+        - Products
       summary: Get Products
       operationId: GetProducts
       parameters: []
@@ -103,18 +101,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
-  /products/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-        required: true
-        description: The Product Id
+  /products/178328fd-5c51-43ba-9c03-a3f98d6c74f5:
     get:
       tags:
-      - Products
+        - Products
       summary: Get Product
       operationId: GetProduct
       parameters: []
@@ -123,11 +113,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /products/categories:
     get:
       tags:
-      - Products
+        - Products
       summary: Get Categories
       operationId: GetCategories
       parameters: []
@@ -136,44 +125,102 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-      security: []
   /products/search:
     get:
       tags:
-      - Products
+        - Products
       summary: Search Products
       operationId: SearchProducts
       parameters:
-      - name: page
-        in: query
-        description: ''
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 1
-      - name: pageSize
-        in: query
-        description: ''
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
-          example: 2
+        - name: page
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+            example: 1
+        - name: pageSize
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int32
+            example: 20
+        - name: search
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: рубашка
+        - name: category
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: рубашки
+        - name: order
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: desc
+        - name: price
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+            example: 2000-3000
       responses:
         '200':
           description: ''
           headers: {}
       deprecated: false
-      security: []
+  /products/favourites:
+    get:
+      tags:
+        - Products
+      summary: Get Favourites
+      operationId: GetFavourites
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /products/favourites/ff005981-c0ce-4ddd-ae40-843411e92a85:
+    post:
+      tags:
+        - Products
+      summary: Toggle Favourite
+      operationId: ToggleFavourite
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
   /orders:
     post:
       tags:
-      - Orders
+        - Orders
       summary: Create Order
       operationId: CreateOrder
       parameters: []
@@ -183,33 +230,37 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/CreateOrderRequest'
-              - example:
-                  email_address: harry@gmail.com
-                  full_name: harry potter
-                  address: berezovaya 11
-                  country: Russia
-                  postal_code: 443080
-                  city: Samara
-                  payment_method: Stripe
-                  items_price: 999
-                  shipping_price: 20
-                  tax_price: 20
-                  total_price: 1038
-                  products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+                - $ref: '#/components/schemas/CreateOrderRequest'
+                - example:
+                    email_address: bobross@gmail.com
+                    full_name: Bob Ross
+                    address: berezovaya 11
+                    country: Russia
+                    postal_code: 443080
+                    city: Samara
+                    payment_method: Stripe
+                    items_price: 5799
+                    shipping_price: 0
+                    tax_price: 0
+                    total_price: 5799
+                    products:
+                      - id: ff005981-c0ce-4ddd-ae40-843411e92a85
+                        quantity: 1
             example:
-              email_address: harry@gmail.com
-              full_name: harry potter
+              email_address: bobross@gmail.com
+              full_name: Bob Ross
               address: berezovaya 11
               country: Russia
               postal_code: 443080
               city: Samara
               payment_method: Stripe
-              items_price: 999
-              shipping_price: 20
-              tax_price: 20
-              total_price: 1038
-              products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+              items_price: 5799
+              shipping_price: 0
+              tax_price: 0
+              total_price: 5799
+              products:
+                - id: ff005981-c0ce-4ddd-ae40-843411e92a85
+                  quantity: 1
         required: true
       responses:
         '200':
@@ -218,7 +269,7 @@ paths:
       deprecated: false
     get:
       tags:
-      - Orders
+        - Orders
       summary: Get My Orders
       operationId: GetMyOrders
       parameters: []
@@ -227,17 +278,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-  /orders/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-        required: true
-        description: The Order Id
+  /orders/d93bcce8-70d6-4ff2-a6a4-54ea83a3035f:
     get:
       tags:
-      - Orders
+        - Orders
       summary: Get Order
       operationId: GetOrder
       parameters: []
@@ -246,9 +290,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
+  /orders/3e1988f1-0691-494b-a0c8-93730cabdeb4:
     delete:
       tags:
-      - Orders
+        - Orders
       summary: Delete Order
       operationId: DeleteOrder
       parameters: []
@@ -257,17 +302,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-  /orders/payment/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-        required: true
-        description: The Product Id
+  /orders/payment/d93bcce8-70d6-4ff2-a6a4-54ea83a3035f:
     patch:
       tags:
-      - Orders
+        - Orders
       summary: Update Payment
       operationId: UpdatePayment
       parameters: []
@@ -276,17 +314,10 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-  /orders/delivery/{id}:
-    parameters:
-      - in: path
-        name: id
-        schema:
-          type: string
-        required: true
-        description: The Ordery Id
+  /orders/delivery/d93bcce8-70d6-4ff2-a6a4-54ea83a3035f:
     patch:
       tags:
-      - Orders
+        - Orders
       summary: Update Delivery
       operationId: UpdateDelivery
       parameters: []
@@ -298,7 +329,7 @@ paths:
   /payment/create-payment-intent:
     post:
       tags:
-      - Payment
+        - Payment
       summary: Create Payment Intent
       operationId: CreatePaymentIntent
       parameters: []
@@ -308,10 +339,10 @@ paths:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/CreatePaymentIntentRequest'
-              - example:
-                  amount: 200
-                  currency: Rub
+                - $ref: '#/components/schemas/CreatePaymentIntentRequest'
+                - example:
+                    amount: 200
+                    currency: Rub
             example:
               amount: 200
               currency: Rub
@@ -324,7 +355,7 @@ paths:
   /upload:
     post:
       tags:
-      - Upload
+        - Upload
       summary: Upload Image
       operationId: UploadImage
       parameters: []
@@ -334,7 +365,7 @@ paths:
             encoding: {}
             schema:
               required:
-              - file
+                - file
               type: object
               properties:
                 file:
@@ -345,19 +376,174 @@ paths:
           description: ''
           headers: {}
       deprecated: false
-  /upload/{image}:
-    parameters:
-      - in: path
-        name: image
-        schema:
-          type: string
-        required: true
-        description: The Image Name
+  /upload/dk8xuzchkaqkgspldrzr:
     delete:
       tags:
-      - Upload
+        - Upload
       summary: Delete Image
       operationId: DeleteImage
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /cart:
+    post:
+      tags:
+        - Cart
+      summary: Add Product To Cart
+      operationId: AddProductToCart
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AddProductToCartRequest'
+                - example:
+                    product:
+                      id: ff005981-c0ce-4ddd-ae40-843411e92a85
+            example:
+              product:
+                id: ff005981-c0ce-4ddd-ae40-843411e92a85
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Cart
+      summary: Get Cart
+      operationId: GetCart
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Cart
+      summary: Clear Cart
+      operationId: ClearCart
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /cart/ff005981-c0ce-4ddd-ae40-843411e92a85:
+    delete:
+      tags:
+        - Cart
+      summary: Remove Product
+      operationId: RemoveProduct
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /cart/ff005981-c0ce-4ddd-ae40-843411e92a85/increment:
+    post:
+      tags:
+        - Cart
+      summary: Increment Product
+      operationId: IncrementProduct
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /cart/ff005981-c0ce-4ddd-ae40-843411e92a85/decrement:
+    post:
+      tags:
+        - Cart
+      summary: Decrement Product
+      operationId: DecrementProduct
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /messages:
+    post:
+      tags:
+        - Messages
+      summary: Send Message
+      operationId: SendMessage
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SendMessageRequest'
+                - example:
+                    subject: Доставка
+                    message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+                    isSend: true
+            example:
+              subject: Доставка
+              message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+              isSend: true
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Messages
+      summary: Get Messages
+      operationId: GetMessages
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /messages/1be719d6-98a8-4f7a-b74f-93d6cdae2545:
+    patch:
+      tags:
+        - Messages
+      summary: Update Message
+      operationId: UpdateMessage
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UpdateMessageRequest'
+                - example:
+                    subject: Доставка
+                    message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+                    isSend: true
+            example:
+              subject: Доставка
+              message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+              isSend: true
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Messages
+      summary: Delete Message
+      operationId: DeleteMessage
       parameters: []
       responses:
         '200':
@@ -369,10 +555,10 @@ components:
     RegisterRequest:
       title: RegisterRequest
       required:
-      - username
-      - email
-      - password
-      - confirmPassword
+        - username
+        - email
+        - password
+        - confirmPassword
       type: object
       properties:
         username:
@@ -384,15 +570,15 @@ components:
         confirmPassword:
           type: string
       example:
-        username: Jane doe
-        email: janedoe@gmail.com
+        username: Bob Ross
+        email: bobross@gmail.com
         password: '123456'
         confirmPassword: '123456'
     LoginRequest:
       title: LoginRequest
       required:
-      - email
-      - password
+        - email
+        - password
       type: object
       properties:
         email:
@@ -400,23 +586,23 @@ components:
         password:
           type: string
       example:
-        email: janedoe@gmail.com
+        email: bobross@gmail.com
         password: '123456'
     CreateOrderRequest:
       title: CreateOrderRequest
       required:
-      - email_address
-      - full_name
-      - address
-      - country
-      - postal_code
-      - city
-      - payment_method
-      - items_price
-      - shipping_price
-      - tax_price
-      - total_price
-      - products
+        - email_address
+        - full_name
+        - address
+        - country
+        - postal_code
+        - city
+        - payment_method
+        - items_price
+        - shipping_price
+        - tax_price
+        - total_price
+        - products
       type: object
       properties:
         email_address:
@@ -447,25 +633,45 @@ components:
           type: integer
           format: int32
         products:
-          type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          description: ''
       example:
-        email_address: harry@gmail.com
-        full_name: harry potter
+        email_address: bobross@gmail.com
+        full_name: Bob Ross
         address: berezovaya 11
         country: Russia
         postal_code: 443080
         city: Samara
         payment_method: Stripe
-        items_price: 999
-        shipping_price: 20
-        tax_price: 20
-        total_price: 1038
-        products: '["178328fd-5c51-43ba-9c03-a3f98d6c74f5"]'
+        items_price: 5799
+        shipping_price: 0
+        tax_price: 0
+        total_price: 5799
+        products:
+          - id: ff005981-c0ce-4ddd-ae40-843411e92a85
+            quantity: 1
+    Product:
+      title: Product
+      required:
+        - id
+        - quantity
+      type: object
+      properties:
+        id:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+      example:
+        id: ff005981-c0ce-4ddd-ae40-843411e92a85
+        quantity: 1
     CreatePaymentIntentRequest:
       title: CreatePaymentIntentRequest
       required:
-      - amount
-      - currency
+        - amount
+        - currency
       type: object
       properties:
         amount:
@@ -476,11 +682,72 @@ components:
       example:
         amount: 200
         currency: Rub
+    AddProductToCartRequest:
+      title: AddProductToCartRequest
+      required:
+        - product
+      type: object
+      properties:
+        product:
+          allOf:
+            - $ref: '#/components/schemas/Product1'
+            - {}
+      example:
+        product:
+          id: ff005981-c0ce-4ddd-ae40-843411e92a85
+    Product1:
+      title: Product1
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+      example:
+        id: ff005981-c0ce-4ddd-ae40-843411e92a85
+    SendMessageRequest:
+      title: SendMessageRequest
+      required:
+        - subject
+        - message
+        - isSend
+      type: object
+      properties:
+        subject:
+          type: string
+        message:
+          type: string
+        isSend:
+          type: boolean
+      example:
+        subject: Доставка
+        message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+        isSend: true
+    UpdateMessageRequest:
+      title: UpdateMessageRequest
+      required:
+        - subject
+        - message
+        - isSend
+      type: object
+      properties:
+        subject:
+          type: string
+        message:
+          type: string
+        isSend:
+          type: boolean
+      example:
+        subject: Доставка
+        message: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi excepturi deleniti expedita, consequuntur quibusdam commodi sapiente asperiores maiores quo vel recusandae fugiat optio debitis voluptatem nobis. Quia odio dolorum, tempora atque ullam sapiente corporis commodi quo minima in dicta? Dicta, in delectus ratione non nulla ea. Possimus sit voluptatum velit?
+        isSend: true
 security:
-- {}
+  - {}
 tags:
-- name: Auth
-- name: Products
-- name: Orders
-- name: Payment
-- name: Upload
+  - name: Auth
+  - name: Products
+  - name: Orders
+  - name: Payment
+  - name: Upload
+  - name: Cart
+  - name: Messages
