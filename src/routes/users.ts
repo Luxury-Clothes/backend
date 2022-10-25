@@ -7,7 +7,7 @@ import admin from '../middleware/admin';
 
 const router = Router();
 
-router.get('/search', searchUsers);
+router.get('/search', auth, searchUsers);
 
 router.patch('/:id', auth, admin, updateUserStatus);
 

@@ -8,6 +8,6 @@ const users_1 = require("../controllers/users");
 const auth_1 = __importDefault(require("../middleware/auth"));
 const admin_1 = __importDefault(require("../middleware/admin"));
 const router = (0, express_1.Router)();
-router.get('/search', users_1.searchUsers);
+router.get('/search', auth_1.default, users_1.searchUsers);
 router.patch('/:id', auth_1.default, admin_1.default, users_1.updateUserStatus);
 exports.default = router;
