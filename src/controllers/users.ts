@@ -12,12 +12,13 @@ export const searchUsers = async (req: Request, res: Response) => {
 
   const allUsers = (
     await query(
-      'SELECT id, username, email, is_admin FROM users WHERE LOWER(username) LIKE $1 OR LOWER(email) LIKE $2;',
+      'SELECT id, username, email, is_admin FROM users WHERE LOWER(username) LIKE $1 OR LOWER(email) LIKE $2 AND id != $3;',
       [
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
+        res.locals.user.id,
       ]
     )
   ).rows;
@@ -26,12 +27,13 @@ export const searchUsers = async (req: Request, res: Response) => {
 
   const users = (
     await query(
-      'SELECT id, username, email, is_admin FROM users WHERE LOWER(username) LIKE $1 OR LOWER(email) LIKE $2 OFFSET $3 LIMIT $4;',
+      'SELECT id, username, email, is_admin FROM users WHERE (LOWER(username) LIKE $1 OR LOWER(email) LIKE $2) AND id != $3 OFFSET $4 LIMIT $5;',
       [
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
         // @ts-ignore
         '%' + search?.toLowerCase()?.trim() + '%',
+        res.locals.user.id,
         pageSize * (page - 1),
         pageSize,
       ]
@@ -54,6 +56,6 @@ export const updateUserStatus = async (req: Request, res: Response) => {
       'UPDATE users SET is_admin = $1 WHERE id = $2 RETURNING id, is_admin, username, email;',
       [isAdmin, id]
     )
-  ).rows;
+  ).rows[0];
   res.status(StatusCodes.OK).json(updatedUser);
 };
