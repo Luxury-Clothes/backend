@@ -185,7 +185,11 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
   const { created_at } = req.query || 'year';
 
-  const orders = (
+  const page = Number(req.query.page) || 1;
+
+  const pageSize = Number(req.query.pageSize) || 5;
+
+  const allOrders = (
     created_at === 'today'
       ? await query(
           "SELECT * FROM orders WHERE created_at >= now()::date - interval '0h' ORDER BY created_at DESC;",
@@ -206,6 +210,30 @@ export const getAllOrders = async (req: Request, res: Response) => {
           []
         )
   ).rows;
+
+  const countOrders = allOrders.length;
+
+  const orders = (
+    created_at === 'today'
+      ? await query(
+          "SELECT * FROM orders WHERE created_at >= now()::date - interval '0h' ORDER BY created_at DESC OFFSET $1 LIMIT $2;",
+          [pageSize * (page - 1), pageSize]
+        )
+      : created_at === 'week'
+      ? await query(
+          "SELECT * FROM orders WHERE created_at >= now()::date - interval '7d' ORDER BY created_at DESC OFFSET $1 LIMIT $2;",
+          [pageSize * (page - 1), pageSize]
+        )
+      : created_at === 'month'
+      ? await query(
+          "SELECT * FROM orders WHERE created_at >= now()::date - interval '30d' ORDER BY created_at DESC OFFSET $1 LIMIT $2;",
+          [pageSize * (page - 1), pageSize]
+        )
+      : await query(
+          "SELECT * FROM orders WHERE created_at >= now()::date - interval '365d' ORDER BY created_at DESC OFFSET $1 LIMIT $2;",
+          [pageSize * (page - 1), pageSize]
+        )
+  ).rows;
   // for (const order of orders) {
   //   const fullProducts = (
   //     await query(
@@ -219,7 +247,13 @@ export const getAllOrders = async (req: Request, res: Response) => {
   //   order.products = fullProducts;
   //   order.payment = payment;
   // }
-  res.status(StatusCodes.OK).json(orders);
+  // res.status(StatusCodes.OK).json(orders);
+  res.status(StatusCodes.OK).json({
+    orders,
+    countOrders,
+    page,
+    pages: Math.ceil(countOrders / pageSize),
+  });
 };
 
 export const deleteOrder = async (req: Request, res: Response) => {
