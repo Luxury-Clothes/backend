@@ -75,6 +75,8 @@ CREATE table order_product (
 	order_id UUID NOT NULL,
 	product_id UUID NOT NULL,
 	quantity numeric DEFAULT 1,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	FOREIGN KEY (order_id) REFERENCES orders(id),
 	FOREIGN KEY (product_id) REFERENCES products(id)
 );

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toggleFavourite = exports.getFavourites = exports.getCategories = exports.getProduct = exports.searchProducts = exports.getProducts = void 0;
+exports.getStats = exports.toggleFavourite = exports.getFavourites = exports.getCategories = exports.getProduct = exports.searchProducts = exports.getProducts = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const db_1 = require("../db/db");
@@ -114,3 +114,20 @@ const toggleFavourite = (req, res) => __awaiter(void 0, void 0, void 0, function
     return res.status(http_status_codes_1.StatusCodes.OK).json({ message: 'success' });
 });
 exports.toggleFavourite = toggleFavourite;
+const getStats = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newUsers = (yield (0, db_1.query)('SELECT COUNT(*) FROM users WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);', [])).rows[0];
+    const newOrders = (yield (0, db_1.query)('SELECT COUNT(*) FROM orders WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);', [])).rows[0];
+    const newMessages = (yield (0, db_1.query)('SELECT COUNT(*) FROM messages WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);', [])).rows[0];
+    const totalEarnings = (yield (0, db_1.query)('SELECT SUM(quantity * price) as earnings FROM order_product INNER JOIN products ON product_id = id;', [])).rows[0];
+    const categories = (yield (0, db_1.query)('SELECT SUM(quantity) as amount, SUM(quantity * price), category FROM order_product INNER JOIN products ON product_id = id GROUP BY category;', [])).rows;
+    const monthlyEarnings = (yield (0, db_1.query)('SELECT SUM(total_price), extract(month FROM created_at) as month FROM orders GROUP BY extract(month FROM created_at)', [])).rows;
+    res.status(http_status_codes_1.StatusCodes.OK).json({
+        newUsers,
+        newOrders,
+        newMessages,
+        totalEarnings,
+        categories,
+        monthlyEarnings,
+    });
+});
+exports.getStats = getStats;

@@ -135,8 +135,6 @@ export const getCategories = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json(categories.map((obj) => obj.category));
 };
 
-
-
 export const getFavourites = async (req: Request, res: Response) => {
   const favourites = (
     await query(
@@ -176,4 +174,51 @@ export const toggleFavourite = async (req: Request, res: Response) => {
     ]);
   }
   return res.status(StatusCodes.OK).json({ message: 'success' });
+};
+
+export const getStats = async (req: Request, res: Response) => {
+  const newUsers = (
+    await query(
+      'SELECT COUNT(*) FROM users WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);',
+      []
+    )
+  ).rows[0];
+  const newOrders = (
+    await query(
+      'SELECT COUNT(*) FROM orders WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);',
+      []
+    )
+  ).rows[0];
+  const newMessages = (
+    await query(
+      'SELECT COUNT(*) FROM messages WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);',
+      []
+    )
+  ).rows[0];
+  const totalEarnings = (
+    await query(
+      'SELECT SUM(quantity * price) as earnings FROM order_product INNER JOIN products ON product_id = id;',
+      []
+    )
+  ).rows[0];
+  const categories = (
+    await query(
+      'SELECT SUM(quantity) as amount, SUM(quantity * price), category FROM order_product INNER JOIN products ON product_id = id GROUP BY category;',
+      []
+    )
+  ).rows;
+  const monthlyEarnings = (
+    await query(
+      'SELECT SUM(total_price), extract(month FROM created_at) as month FROM orders GROUP BY extract(month FROM created_at)',
+      []
+    )
+  ).rows;
+  res.status(StatusCodes.OK).json({
+    newUsers,
+    newOrders,
+    newMessages,
+    totalEarnings,
+    categories,
+    monthlyEarnings,
+  });
 };
