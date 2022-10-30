@@ -183,15 +183,33 @@ export const getStats = async (req: Request, res: Response) => {
       []
     )
   ).rows[0];
+  const oldUsers = (
+    await query(
+      'SELECT COUNT(*) FROM users WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE) - 1;',
+      []
+    )
+  ).rows[0];
   const newOrders = (
     await query(
       'SELECT COUNT(*) FROM orders WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);',
       []
     )
   ).rows[0];
+  const oldOrders = (
+    await query(
+      'SELECT COUNT(*) FROM orders WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE) - 1;',
+      []
+    )
+  ).rows[0];
   const newMessages = (
     await query(
       'SELECT COUNT(*) FROM messages WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE);',
+      []
+    )
+  ).rows[0];
+  const oldMessages = (
+    await query(
+      'SELECT COUNT(*) FROM messages WHERE extract(month FROM created_at) = extract(month FROM CURRENT_DATE) - 1;',
       []
     )
   ).rows[0];
@@ -214,9 +232,18 @@ export const getStats = async (req: Request, res: Response) => {
     )
   ).rows;
   res.status(StatusCodes.OK).json({
-    newUsers,
-    newOrders,
-    newMessages,
+    users: {
+      newUsers,
+      oldUsers,
+    },
+    orders: {
+      newOrders,
+      oldOrders,
+    },
+    messages: {
+      newMessages,
+      oldMessages,
+    },
     totalEarnings,
     categories,
     monthlyEarnings,
